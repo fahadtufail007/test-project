@@ -130,26 +130,40 @@ class TodosContainer extends Container {
     return todos
   }
 
-  getTodos(listId) {
+  getTodos(listId, filter) {
     const list = this.getTodosList(listId)
-    return list[0].todoList
+    let filteredList = []
+
+    if (filter === 'Completed') {
+      filteredList = list[0].todoList.filter(todo => todo.completed)
+    } else if (filter === 'Active') {
+      filteredList = list[0].todoList.filter(todo => todo.completed === false)
+    } else filteredList = list[0].todoList
+
+    return filteredList
   }
 
-  toggleComplete = async id => {
-    const item = this.state.list.find(i => i.id === id)
+  toggleComplete = async (id, listId) => {
+    const list = this.getTodosList(listId)
+
+    const item = list[0].todoList.find(i => i.id === id)
     const completed = !item.completed
 
     // We're using await on setState here because this comes from unstated package, not React
     // See: https://github.com/jamiebuilds/unstated#introducing-unstated
-    await this.setState(state => {
-      const list = state.list.map(item => {
-        if (item.id !== id) return item
-        return {
-          ...item,
-          completed
-        }
-      })
-      return { list }
+
+    const updatedList = list[0].todoList.map(item => {
+      if (item.id !== id) return item
+      return {
+        ...item,
+        completed
+      }
+    })
+
+    list[0].todoList = updatedList
+    const newList = list[0].todoList
+    await this.setState({
+      newList
     })
 
     this.syncStorage()

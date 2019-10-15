@@ -1,6 +1,7 @@
 import { Container } from 'unstated'
 
 const defaultState = {
+  // this array is a group of objects that contains 'List Names' and list of 'todos'.
   list: [
     {
       id: 1,
@@ -90,6 +91,7 @@ const defaultState = {
     }
   ]
 }
+const index = 0
 
 class TodosContainer extends Container {
   constructor(props) {
@@ -120,6 +122,7 @@ class TodosContainer extends Container {
     return this.state.list
   }
 
+  // it filters the todoList object on the basis of 'list id' from the array of list 
   getTodosList(listId) {
     const { list } = this.state;
     const todos = list.filter((todoList) => {
@@ -135,10 +138,10 @@ class TodosContainer extends Container {
     let filteredList = []
 
     if (filter === 'Completed') {
-      filteredList = list[0].todoList.filter(todo => todo.completed)
+      filteredList = list[index].todoList.filter(todo => todo.completed)
     } else if (filter === 'Active') {
-      filteredList = list[0].todoList.filter(todo => todo.completed === false)
-    } else filteredList = list[0].todoList
+      filteredList = list[index].todoList.filter(todo => todo.completed === false)
+    } else filteredList = list[index].todoList
 
     return filteredList
   }
@@ -146,13 +149,13 @@ class TodosContainer extends Container {
   toggleComplete = async (id, listId) => {
     const list = this.getTodosList(listId)
 
-    const item = list[0].todoList.find(i => i.id === id)
+    const item = list[index].todoList.find(i => i.id === id)
     const completed = !item.completed
 
     // We're using await on setState here because this comes from unstated package, not React
     // See: https://github.com/jamiebuilds/unstated#introducing-unstated
 
-    const updatedList = list[0].todoList.map(item => {
+    const updatedList = list[index].todoList.map(item => {
       if (item.id !== id) return item
       return {
         ...item,
@@ -160,8 +163,8 @@ class TodosContainer extends Container {
       }
     })
 
-    list[0].todoList = updatedList
-    const newList = list[0].todoList
+    list[index].todoList = updatedList
+    const newList = list[index].todoList
     await this.setState({
       newList
     })
@@ -186,7 +189,7 @@ class TodosContainer extends Container {
 
   createTodo = async (text, listId) => {
     const todoList = this.getTodosList(listId);
-    todoList[0].todoList.push({ id: todoList.length + 1, completed: false, text: text })
+    todoList[index].todoList.push({ id: todoList.length + 1, completed: false, text: text })
     await this.setState({ todoList })
     this.syncStorage()
   }

@@ -3,11 +3,11 @@ import styled from 'styled-components'
 
 import TodoItem from '../common/TodoItem'
 
-const TodoList = ({ items, toggleComplete }) => (
+const Item = ({ items, listId, toggleComplete }) => (
   <Wrapper>
     {items.map(item => {
       const onComplete = e => {
-        toggleComplete(item.id)
+        toggleComplete(item.id, listId)
       }
 
       return <TodoItem showCompletedBox={true} key={item.id} {...item} onComplete={onComplete} />
@@ -20,4 +20,4 @@ const Wrapper = styled.div`
   flex-direction: column;
 `
 
-export default TodoList
+export default Item

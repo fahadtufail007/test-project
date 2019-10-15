@@ -1,7 +1,7 @@
 import React from 'react'
 import { Subscribe } from 'unstated'
-import TodosContainer from '../../store';
 
+import TodosContainer from '../../store';
 import TodoList from './Item'
 import AddTodo from '../common/AddTodo'
 
